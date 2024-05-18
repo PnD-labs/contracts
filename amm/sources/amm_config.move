@@ -1,4 +1,4 @@
-module gmi::amm_config{
+module amm::amm_config{
     use sui::object::{Self, UID};
     use sui::tx_context::{Self, TxContext, sender};
     use sui::balance::{Self, Balance};

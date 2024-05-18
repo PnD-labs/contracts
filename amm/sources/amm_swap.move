@@ -1,4 +1,4 @@
-module gmi::amm_swap {
+module amm::amm_swap {
     use sui::object::{Self, UID};
     use sui::coin::{Self, Coin};
     use sui::sui::{SUI};
@@ -8,9 +8,9 @@ module gmi::amm_swap {
     use sui::balance::{Self,Balance};
     use sui::event::{Self};
     use sui::pay::{Self};
-    use gmi::amm_config::{Self,Config};
-    use gmi::amm_math::{Self};
-    use gmi::amm_utils::{Self};
+    use amm::amm_config::{Self,Config};
+    use amm::amm_math::{Self};
+    use amm::amm_utils::{Self};
     //@@gmi pool is don't have lp token
     public struct Pool<phantom MemeCoin> has key {
         id: UID,

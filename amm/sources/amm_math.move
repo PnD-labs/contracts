@@ -1,4 +1,4 @@
-module gmi::amm_math{
+module amm::amm_math{
     const EInvalidAddParam:u64 = 0;
     const EInvalidDivParam:u64 = 1;
     public fun safe_mul_u64(x: u64, y: u64): u64 {
