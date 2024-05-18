@@ -10,6 +10,7 @@ module meme_coin::meme_coin {
     use std::option::{Self,Option};
     use std::string::{Self,String};
     use std::ascii::{Self,String as Ascii};
+    use gmi::amm_swap::{Self,Pool};
     public struct MEME_COIN has drop{}
  
 

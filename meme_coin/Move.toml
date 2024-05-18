@@ -6,7 +6,7 @@ edition = "2024.beta" # edition = "legacy" to use legacy (pre-2024) Move
 
 [dependencies]
 Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework/packages/sui-framework", rev = "framework/testnet" }
-
+Gmi = { git = "https://github.com/PnD-labs/contracts.git", subdir = "gmi" }
 # For remote import, use the `{ git = "...", subdir = "...", rev = "..." }`.
 # Revision can be a branch, a tag, and a commit hash.
 # MyRemotePackage = { git = "https://some.remote/host.git", subdir = "remote/path", rev = "main" }
@@ -20,7 +20,7 @@ Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-fram
 
 [addresses]
 meme_coin = "0x0"
-
+gmi_amm = "0x1d2acf68fdd5f53a4d40b38164f18ed00d05464335d712768865ca6519629b38"
 # Named addresses will be accessible in Move as `@name`. They're also exported:
 # for example, `std = "0x1"` is exported by the Standard Library.
 # alice = "0xA11CE"
