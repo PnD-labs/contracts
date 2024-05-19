@@ -14,8 +14,8 @@ module amm::amm_swap {
     //@@gmi pool is don't have lp token
     public struct Pool<phantom MemeCoin> has key {
         id: UID,
-        reserve_a: Balance<MemeCoin>,
-        reserve_b: Balance<SUI>,
+        reserve_meme: Balance<MemeCoin>,
+        reserve_sui: Balance<SUI>,
         //Locked if pool is $69K or more.
         lock:bool,
     }
@@ -66,26 +66,26 @@ module amm::amm_swap {
     ):Pool<MemeCoin>{
         let pool = Pool<MemeCoin>{
             id: object::new(ctx),
-            reserve_a: coin::into_balance(meme_coin),
-            reserve_b: coin::into_balance(sui_token),
+            reserve_meme: coin::into_balance(meme_coin),
+            reserve_sui: coin::into_balance(sui_token),
             lock:false,
         };
         pool
     }
 
 
-    entry public fun sell_meme_coin<MemeCoin>(pool: &mut Pool<MemeCoin>, config: &Config, input_coin: Coin<MemeCoin>, ctx: &mut TxContext) {
-        let swap_amount = input_coin.value();
+    entry public fun sell_meme_coin<MemeCoin>(pool: &mut Pool<MemeCoin>, config: &Config, meme_coin: Coin<MemeCoin>, ctx: &mut TxContext) {
+        let swap_amount = meme_coin.value();
         let (reserve_meme,reserve_sui) = pool.get_reserves();
         let (swap_fee_numerator,swap_fee_denominator) = amm_config::get_swap_fee(config);
     
         assert!(swap_amount > config.get_minimum_swap_amount(), ECoinInsufficient);
         
-        let sui_coin_amount = amm_utils::get_amount_out(reserve_meme,reserve_sui,swap_amount, swap_fee_denominator,swap_fee_numerator, true);
+        let sui_coin_amount = amm_utils::compute_amount_out(swap_amount,reserve_meme,reserve_sui, swap_fee_denominator,swap_fee_numerator);
         
-        let sui_coin = coin::from_balance(pool.reserve_b.split(sui_coin_amount), ctx);
+        let sui_coin = coin::from_balance(pool.reserve_sui.split(sui_coin_amount), ctx);
         
-        pool.reserve_a.join(coin::into_balance(input_coin));
+        pool.reserve_meme.join(coin::into_balance(meme_coin));
         pay::keep(sui_coin, ctx);
         event::emit(SwapEvent{
             sender: tx_context::sender(ctx),
@@ -109,10 +109,10 @@ module amm::amm_swap {
 
         assert!(sui_coin_amount > config.get_minimum_swap_amount(), ECoinInsufficient);
         
-        let meme_coin_amount =  amm_utils::get_amount_out(reserve_meme,reserve_sui,sui_coin_amount, swap_fee_denominator,swap_fee_numerator,false);
+        let meme_coin_amount =  amm_utils::compute_amount_out(sui_coin_amount,reserve_sui,reserve_meme, swap_fee_denominator,swap_fee_numerator);
         
-        let meme_coin = coin::from_balance(pool.reserve_b.split(meme_coin_amount), ctx);
-        pool.reserve_b.join(coin::into_balance(sui_coin));
+        let meme_coin = coin::from_balance(pool.reserve_meme.split(meme_coin_amount), ctx);
+        pool.reserve_sui.join(coin::into_balance(sui_coin));
         pay::keep(meme_coin, ctx);
         event::emit(SwapEvent{
             sender: tx_context::sender(ctx),
@@ -128,8 +128,8 @@ module amm::amm_swap {
     }
     
     public fun get_reserves<MemeCoin>(pool: &Pool<MemeCoin>) : (u64,u64) {
-        let reserve_meme = balance::value(&pool.reserve_a);
-        let reserve_sui = balance::value(&pool.reserve_b);
+        let reserve_meme = balance::value(&pool.reserve_meme);
+        let reserve_sui = balance::value(&pool.reserve_sui);
         (reserve_meme,reserve_sui)
     }
 

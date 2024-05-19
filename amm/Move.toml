@@ -3,7 +3,7 @@ name = "Amm"
 edition = "2024.beta" # edition = "legacy" to use legacy (pre-2024) Move
 # license = ""           # e.g., "MIT", "GPL", "Apache 2.0"
 # authors = ["..."]      # e.g., ["Joe Smith (joesmith@noemail.com)", "John Snow (johnsnow@noemail.com)"]
-
+published-at = "0xcd43f9739b0a553fff48418666205ac8db28b406b56087681ebecca1c37082e4"
 [dependencies]
 Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework/packages/sui-framework", rev = "framework/testnet" }
 # Cetus = { git = "https://github.com/CetusProtocol/cetus-amm.git", subdir = "sui", rev = "main" }
@@ -19,7 +19,7 @@ Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-fram
 # Override = { local = "../conflicting/version", override = true }
 
 [addresses]
-amm = "0x1d2acf68fdd5f53a4d40b38164f18ed00d05464335d712768865ca6519629b38"
+amm = "0xcd43f9739b0a553fff48418666205ac8db28b406b56087681ebecca1c37082e4"
 sui = "0x2"
 
 

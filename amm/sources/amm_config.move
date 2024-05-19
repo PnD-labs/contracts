@@ -31,7 +31,7 @@ module amm::amm_config{
             mint_fee: 1000,
             swap_fee_numerator: 3, // 0.3% = 3 / 1000
             swap_fee_denominator: 1000,
-            protocol_fee_numerator: 0, // 0% = 0 / 1
+            protocol_fee_numerator: 1, // 0% = 0 / 1
             protocol_fee_denominator: 1,
             protocol_fee_switch:false,
             minimum_swap_amount:1000,
