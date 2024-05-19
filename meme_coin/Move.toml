@@ -5,9 +5,10 @@ edition = "2024.beta" # edition = "legacy" to use legacy (pre-2024) Move
 # authors = ["..."]      # e.g., ["Joe Smith (joesmith@noemail.com)", "John Snow (johnsnow@noemail.com)"]
 
 [dependencies]
+Amm = { local = "../amm" }
 Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework/packages/sui-framework", rev = "framework/testnet" }
-Gmi = { git = "https://github.com/PnD-labs/contracts.git", subdir = "gmi" }
 # For remote import, use the `{ git = "...", subdir = "...", rev = "..." }`.
+# Amm = { git = "https://github.com/PnD-labs/contracts.git", subdir = "amm", rev = "main" }
 # Revision can be a branch, a tag, and a commit hash.
 # MyRemotePackage = { git = "https://some.remote/host.git", subdir = "remote/path", rev = "main" }
 
@@ -20,7 +21,8 @@ Gmi = { git = "https://github.com/PnD-labs/contracts.git", subdir = "gmi" }
 
 [addresses]
 meme_coin = "0x0"
-gmi_amm = "0x1d2acf68fdd5f53a4d40b38164f18ed00d05464335d712768865ca6519629b38"
+sui = "0x2"
+amm = "0xcd43f9739b0a553fff48418666205ac8db28b406b56087681ebecca1c37082e4"
 # Named addresses will be accessible in Move as `@name`. They're also exported:
 # for example, `std = "0x1"` is exported by the Standard Library.
 # alice = "0xA11CE"
