@@ -92,7 +92,7 @@ module meme_coin::meme_coin {
         let sender_meme_coin = coin::split(&mut listing_meme_coin,sender_amount,ctx);
         transfer::public_transfer(sender_meme_coin,tx_context::sender(ctx));
         amm_swap::init_pool<MEME_COIN>(amm_config,listing_meme_coin,sui_coin,ctx);
-        //Pool을 불러와야함.
+        
     }
 
     

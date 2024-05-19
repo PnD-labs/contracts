@@ -12,12 +12,9 @@ module amm::amm_utils{
         fee_numerator: u64
     ): u64 {
         let swap_amount = calculate_swap_amount_after_fee(amount_in,fee_denominator,fee_numerator);
-        let k:u128 = (input_reserve as u128) * (output_reserve as u128);
         let new_input_reserve = input_reserve + swap_amount;
-        let result = output_reserve as u128 - ((k / (new_input_reserve as u128)));
-
-        result as u64
-   
+        let k  = (input_reserve as u128) * (output_reserve as u128);
+        output_reserve  - (k / (new_input_reserve as u128)as u64 )
     }
 
     public fun calculate_swap_amount_after_fee(amount_in:u64,fee_denominator:u64,fee_numerator:u64):u64{
@@ -33,7 +30,7 @@ module amm::amm_utils{
 module amm::test_amm_utils {
     use amm::amm_utils;
     use amm::amm_math;
-    use std::debug;
+    // use std::debug;
     #[test]
     // Test function for compute_amount_out
     public fun test_compute_amount_out() {
