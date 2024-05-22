@@ -32,7 +32,10 @@ module meme_coin::meme_coin {
         treasury:ID,
         metadata:ID,
         creator:address,
+        
     }
+
+
 
     fun init(otw:MEME_COIN,ctx:&mut TxContext){
           let ( coin_cap, coin_metadata) = coin::create_currency(
@@ -54,14 +57,14 @@ module meme_coin::meme_coin {
     }
     
 
-    entry fun initial_coin(
+    entry fun init_coin(
         treasury:&TreasuryCap<MEME_COIN>,
         metadata:CoinMetadata<MEME_COIN>,
         symbol: vector<u8>,
         name: vector<u8>,
         description: vector<u8>,
         icon_url: vector<u8>,
-        creator:address,
+        ctx:&TxContext,
     ){ 
         let mut metadata = metadata;
         let treasury_id = object::id(treasury);
@@ -70,7 +73,6 @@ module meme_coin::meme_coin {
         coin::update_name(treasury,&mut metadata,string::utf8(name));
         coin::update_description(treasury,&mut metadata,string::utf8(description));
         coin::update_icon_url(treasury,&mut metadata,ascii::string(icon_url));
-
         let event = CreateCoinEvent{
             symbol:coin::get_symbol(&metadata),
             name:coin::get_name(&metadata),
@@ -78,21 +80,18 @@ module meme_coin::meme_coin {
             icon_url:coin::get_icon_url(&metadata),
             treasury:treasury_id,
             metadata:metadata_id,
-            creator,
+            creator:tx_context::sender(ctx),
+          
         };
-        transfer::public_freeze_object(metadata);
         event::emit(event);
+        transfer::public_freeze_object(metadata);
     }
 
 
 
-    entry fun mint_and_listing_dex(cap:&mut TreasuryCap<MEME_COIN>,amm_config:&Config,sui_coin:Coin<SUI>,sender_amount:u64,ctx:&mut TxContext){
-        
-        let mut listing_meme_coin = coin::mint<MEME_COIN>(cap,INIT_TOTAL_SUPPLY,ctx);
-        let sender_meme_coin = coin::split(&mut listing_meme_coin,sender_amount,ctx);
-        transfer::public_transfer(sender_meme_coin,tx_context::sender(ctx));
-        amm_swap::init_pool<MEME_COIN>(amm_config,listing_meme_coin,sui_coin,ctx);
-        //Pool을 불러와야함.
+    entry fun init_mint(cap:&mut TreasuryCap<MEME_COIN>,ctx:&mut TxContext){
+        let meme_coin = coin::mint<MEME_COIN>(cap,INIT_TOTAL_SUPPLY,ctx);
+        transfer::public_transfer(meme_coin,tx_context::sender(ctx));
     }
 
     

@@ -21,11 +21,13 @@ module amm::amm_swap {
     }
 
     //@@ Event
-    public struct MakePoolEvent has copy,drop{
+    public struct CreatePoolEvent has copy,drop{
         sender:address,
         pool_id:ID,
-        
+        reserve_meme:u64,
+        reserve_sui:u64,
     }
+
 
     public struct SwapEvent has copy,drop{
         sender:address,
@@ -41,38 +43,31 @@ module amm::amm_swap {
     const ECoinInsufficient: u64 = 0;
 
     // Entry function to mint a new coin and initialize a liquidity pool
-    entry public  fun init_pool<MemeCoin>(
+    entry fun create_pool<MemeCoin>(
         config: &Config,
-        x:Coin<MemeCoin>,
-        y: Coin<SUI>,
-        ctx: &mut TxContext
-    ) {
-        //@@balance check 
-        
-        let pool = make_pool(x,y, ctx);
-        let pool_id = object::id(&pool);
-
-        transfer::share_object(pool);
-        event::emit(MakePoolEvent {
-            sender: tx_context::sender(ctx),
-            pool_id,
-        })
-    }
-
-    fun make_pool<MemeCoin>(
-        meme_coin: Coin<MemeCoin>,
+        meme_coin:Coin<MemeCoin>,
         sui_token: Coin<SUI>,
         ctx: &mut TxContext
-    ):Pool<MemeCoin>{
-        let pool = Pool<MemeCoin>{
+    ) {
+        //@@balance check                   
+       let pool = Pool<MemeCoin>{
             id: object::new(ctx),
             reserve_meme: coin::into_balance(meme_coin),
             reserve_sui: coin::into_balance(sui_token),
             lock:false,
         };
-        pool
+        let pool_id = object::id(&pool);
+        let event = CreatePoolEvent{
+            sender: tx_context::sender(ctx),
+            pool_id: pool_id,
+            reserve_meme:pool.reserve_meme.value(),
+            reserve_sui:pool.reserve_sui.value(),
+        };
+        transfer::share_object(pool);
+        event::emit(event);
     }
 
+  
 
     entry public fun sell_meme_coin<MemeCoin>(pool: &mut Pool<MemeCoin>, config: &Config, meme_coin: Coin<MemeCoin>, ctx: &mut TxContext) {
         let swap_amount = meme_coin.value();
@@ -124,7 +119,6 @@ module amm::amm_swap {
             reserve_meme,
             reserve_sui,
         })
-        
     }
     
     public fun get_reserves<MemeCoin>(pool: &Pool<MemeCoin>) : (u64,u64) {

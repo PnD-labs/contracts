@@ -3,23 +3,12 @@ name = "Amm"
 edition = "2024.beta" # edition = "legacy" to use legacy (pre-2024) Move
 # license = ""           # e.g., "MIT", "GPL", "Apache 2.0"
 # authors = ["..."]      # e.g., ["Joe Smith (joesmith@noemail.com)", "John Snow (johnsnow@noemail.com)"]
-published-at = "0xa0f602eeb084ca6663b73c80240d0c52305d223491c8fb6dd88311fbbce1ff27"
+published-at = "0xcb99e22366b9e29d0e9b87828d2f863ba4cdb7884bcd8eb7c6bfd3484bed7a37"
 [dependencies]
 Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework/packages/sui-framework", rev = "framework/testnet" }
-# Cetus = { git = "https://github.com/CetusProtocol/cetus-amm.git", subdir = "sui", rev = "main" }
-# For remote import, use the `{ git = "...", subdir = "...", rev = "..." }`.
-# Revision can be a branch, a tag, and a commit hash.
-# MyRemotePackage = { git = "https://some.remote/host.git", subdir = "remote/path", rev = "main" }
-
-# For local dependencies use `local = path`. Path is relative to the package root
-# Local = { local = "../path/to" }
-
-# To resolve a version conflict and force a specific version for dependency
-# override use `override = true`
-# Override = { local = "../conflicting/version", override = true }
 
 [addresses]
-amm = "0xa0f602eeb084ca6663b73c80240d0c52305d223491c8fb6dd88311fbbce1ff27"
+amm = "0xcb99e22366b9e29d0e9b87828d2f863ba4cdb7884bcd8eb7c6bfd3484bed7a37"
 sui = "0x2"
 
 
