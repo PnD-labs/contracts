@@ -1,6 +1,6 @@
 module amm::amm_swap {
     use sui::object::{Self, UID};
-    use sui::coin::{Self, Coin};
+    use sui::coin::{Self, Coin,CoinMetadata,TreasuryCap};
     use sui::sui::{SUI};
     
     use sui::transfer;
@@ -8,9 +8,13 @@ module amm::amm_swap {
     use sui::balance::{Self,Balance};
     use sui::event::{Self};
     use sui::pay::{Self};
+    use sui::clock::{Self, Clock};
+ 
+    
     use amm::amm_config::{Self,Config};
     use amm::amm_math::{Self};
     use amm::amm_utils::{Self};
+ 
     //@@gmi pool is don't have lp token
     public struct Pool<phantom MemeCoin> has key {
         id: UID,
@@ -22,15 +26,17 @@ module amm::amm_swap {
 
     //@@ Event
     public struct CreatePoolEvent has copy,drop{
-        sender:address,
+        account:address,
         pool_id:ID,
+        treasury_id:ID,
+        metadata_id:ID,
         reserve_meme:u64,
         reserve_sui:u64,
     }
 
 
     public struct SwapEvent has copy,drop{
-        sender:address,
+        account:address,
         pool_id:ID,
         meme_in_amount:u64,
         meme_out_amount:u64,
@@ -40,15 +46,20 @@ module amm::amm_swap {
         reserve_sui:u64,
     }
     
-    const ECoinInsufficient: u64 = 0;
+    const INIT_MEME_COIN_AMOUNT:u64 = 100_000_000_000_000_000;
 
+
+    const ECoinInsufficient: u64 = 0;
+    const EInvalidInitialAmount:u64 = 1;
     // Entry function to mint a new coin and initialize a liquidity pool
     entry fun create_pool<MemeCoin>(
-        config: &Config,
+        treasury:&TreasuryCap<MemeCoin>,
+        metadata:&CoinMetadata<MemeCoin>,
         meme_coin:Coin<MemeCoin>,
         sui_token: Coin<SUI>,
         ctx: &mut TxContext
     ) {
+        assert!(meme_coin.value() == INIT_MEME_COIN_AMOUNT, EInvalidInitialAmount);
         //@@balance check                   
        let pool = Pool<MemeCoin>{
             id: object::new(ctx),
@@ -57,9 +68,13 @@ module amm::amm_swap {
             lock:false,
         };
         let pool_id = object::id(&pool);
+        let metadata_id = object::id(metadata);
+        let treasury_id = object::id(treasury);
         let event = CreatePoolEvent{
-            sender: tx_context::sender(ctx),
-            pool_id: pool_id,
+            account: tx_context::sender(ctx),
+            pool_id,
+            metadata_id,
+            treasury_id,
             reserve_meme:pool.reserve_meme.value(),
             reserve_sui:pool.reserve_sui.value(),
         };
@@ -70,6 +85,7 @@ module amm::amm_swap {
   
 
     entry public fun sell_meme_coin<MemeCoin>(pool: &mut Pool<MemeCoin>, config: &Config, meme_coin: Coin<MemeCoin>, ctx: &mut TxContext) {
+        
         let swap_amount = meme_coin.value();
         let (reserve_meme,reserve_sui) = pool.get_reserves();
         let (swap_fee_numerator,swap_fee_denominator) = amm_config::get_swap_fee(config);
@@ -83,7 +99,7 @@ module amm::amm_swap {
         pool.reserve_meme.join(coin::into_balance(meme_coin));
         pay::keep(sui_coin, ctx);
         event::emit(SwapEvent{
-            sender: tx_context::sender(ctx),
+            account: tx_context::sender(ctx),
             pool_id: object::id(pool),
             meme_in_amount:swap_amount,
             meme_out_amount:0,
@@ -96,7 +112,8 @@ module amm::amm_swap {
     }
 
 
-    entry public fun buy_meme_coin<MemeCoin>(pool: &mut Pool<MemeCoin>, config: &Config, sui_coin: Coin<SUI>, ctx: &mut TxContext) {
+    entry public fun buy_meme_coin<MemeCoin>(pool: &mut Pool<MemeCoin>, config: &Config, sui_coin: Coin<SUI>, ctx:&mut TxContext) {
+        
         let sui_coin_amount = sui_coin.value();
         let (reserve_meme,reserve_sui) = pool.get_reserves();
         let (swap_fee_numerator,swap_fee_denominator) = amm_config::get_swap_fee(config);
@@ -110,7 +127,7 @@ module amm::amm_swap {
         pool.reserve_sui.join(coin::into_balance(sui_coin));
         pay::keep(meme_coin, ctx);
         event::emit(SwapEvent{
-            sender: tx_context::sender(ctx),
+            account: tx_context::sender(ctx),
             pool_id: object::id(pool),
             meme_in_amount:0,
             meme_out_amount:meme_coin_amount,
