@@ -50,7 +50,8 @@ module amm::amm_swap {
 
 
     const ECoinInsufficient: u64 = 0;
-    const EInvalidInitialAmount:u64 = 1;
+    const EInvalidSuiInitialAmount:u64 = 1;
+    const EInvalidMemeInitialAmount:u64 = 2;
     // Entry function to mint a new coin and initialize a liquidity pool
     entry fun create_pool<MemeCoin>(
         treasury:&TreasuryCap<MemeCoin>,
@@ -60,8 +61,8 @@ module amm::amm_swap {
         sui_token: Coin<SUI>,
         ctx: &mut TxContext
     ) {
-        assert!(meme_coin.value() == config.get_pool_init_meme_coin_balance(), EInvalidInitialAmount);
-        assert!(sui_token.value() == config.get_pool_init_sui_balance(), EInvalidInitialAmount);
+        assert!(meme_coin.value() == config.get_pool_init_meme_coin_balance(), EInvalidMemeInitialAmount);
+        assert!(sui_token.value() == config.get_pool_init_sui_balance(), EInvalidSuiInitialAmount);
         //@@balance check                   
        let pool = Pool<MemeCoin>{
             id: object::new(ctx),

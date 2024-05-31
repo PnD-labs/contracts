@@ -16,7 +16,7 @@ module meme_coin::meme_coin {
  
 
     const DECIMAL:u8 = 9;
-    const INIT_TOTAL_SUPPLY:u64 = 100_000_000_000_000_000;
+    const INIT_TOTAL_SUPPLY:u64 = 1_000_000_000_000_000_000;
 
 
 

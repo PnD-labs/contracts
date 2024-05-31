@@ -10,7 +10,7 @@ Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-fram
 Amm = { "local" = "../amm" }
 [addresses]
 meme_coin = "0x0"
-amm = "0xa5277b1654d9c329b0b2da4fa7217d2f4e22cbd08392d1d364f51cf26ba4c9ff"
+amm = "0x7810a091ab2db45d47d3ad83b291e472ab97d8924599d0526975f20c96dd10e0"
 sui = "0x2"
 
 

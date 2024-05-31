@@ -34,7 +34,11 @@ module meme_coin::meme_coin {
         creator:address,
         
     }
-
+    public struct CoinInitMint has copy,drop{
+        treasury:ID,
+        creator:address,
+        balance:u64,
+    }
 
 
     fun init(otw:MEME_COIN,ctx:&mut TxContext){
@@ -85,13 +89,21 @@ module meme_coin::meme_coin {
         };
         event::emit(event);
         transfer::public_freeze_object(metadata);
+        
     }
 
 
 
     entry fun init_mint(cap:&mut TreasuryCap<MEME_COIN>,ctx:&mut TxContext){
         let meme_coin = coin::mint<MEME_COIN>(cap,INIT_TOTAL_SUPPLY,ctx);
+        let event = CoinInitMint{
+            treasury:object::id(cap),
+            creator:tx_context::sender(ctx),
+            balance:INIT_TOTAL_SUPPLY,
+        };
         transfer::public_transfer(meme_coin,tx_context::sender(ctx));
+        event::emit(event);
+        
     }
 
     
