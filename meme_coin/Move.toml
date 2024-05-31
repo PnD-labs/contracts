@@ -5,12 +5,12 @@ edition = "2024.beta" # edition = "legacy" to use legacy (pre-2024) Move
 # authors = ["..."]      # e.g., ["Joe Smith (joesmith@noemail.com)", "John Snow (johnsnow@noemail.com)"]
 
 [dependencies]
-Amm = { git = "https://github.com/PnD-labs/contracts.git", subdir = "amm", rev = "main" }
+# Amm = { git = "https://github.com/PnD-labs/contracts.git", subdir = "amm", rev = "main" }
 Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework/packages/sui-framework", rev = "framework/testnet" }
-
+Amm = { "local" = "../amm" }
 [addresses]
 meme_coin = "0x0"
-amm = "0xb453ef9810c36eaad95cb6309338acacd5f380ddf926e660a932951fe8d779b6"
+amm = "0x8b25c7965b9a58839ae9aef9e967dbcba111a859221f4e9b16c9446395d9a078"
 sui = "0x2"
 
 

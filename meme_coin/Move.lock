@@ -2,7 +2,7 @@
 
 [move]
 version = 2
-manifest_digest = "6C1FB2A854E687996B45062F9D5E3FEFBC903BC130A660DB1935B39B3F2F22BD"
+manifest_digest = "80DEF41F852B67AF161C74C586183CB831FB35C6F88415E1A7AE6C21D4A471B8"
 deps_digest = "3C4103934B1E040BB6B23F1D610B4EF9F2F1166A50A104EADCF77467C004C600"
 dependencies = [
   { name = "Amm" },
@@ -11,7 +11,7 @@ dependencies = [
 
 [[move.package]]
 name = "Amm"
-source = { git = "https://github.com/PnD-labs/contracts.git", rev = "main", subdir = "amm" }
+source = { local = "../amm" }
 
 dependencies = [
   { name = "Sui" },
@@ -38,12 +38,18 @@ flavor = "sui"
 
 [env.testnet]
 chain-id = "4c78adac"
-original-published-id = "0xa50fdbaa47995b6dec3db6af2dc96291a4facdaca66f63720c4630bf3f9bf9a8"
-latest-published-id = "0xa50fdbaa47995b6dec3db6af2dc96291a4facdaca66f63720c4630bf3f9bf9a8"
+original-published-id = "0x25d558277e979d65cf867a22b34f37d8fcb96a0dae4f22776664278dc27f40f9"
+latest-published-id = "0x25d558277e979d65cf867a22b34f37d8fcb96a0dae4f22776664278dc27f40f9"
 published-version = "1"
 
 [env.devnet]
 chain-id = "b3f81552"
 original-published-id = "0xbbff2426e6dc75bc08da8cd03364d740adbd3fee94287a3a21015cbcbe70f90d"
 latest-published-id = "0xbbff2426e6dc75bc08da8cd03364d740adbd3fee94287a3a21015cbcbe70f90d"
+published-version = "1"
+
+[env.mainnet]
+chain-id = "35834a8a"
+original-published-id = "0xc8eea89fc8cf797e7cb9b948b74a621c5310fde73c78223636f572ab2c941913"
+latest-published-id = "0xc8eea89fc8cf797e7cb9b948b74a621c5310fde73c78223636f572ab2c941913"
 published-version = "1"
