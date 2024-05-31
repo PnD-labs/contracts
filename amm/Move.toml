@@ -3,11 +3,11 @@ name = "Amm"
 edition = "2024.beta" # edition = "legacy" to use legacy (pre-2024) Move
 # license = ""           # e.g., "MIT", "GPL", "Apache 2.0"
 # authors = ["..."]      # e.g., ["Joe Smith (joesmith@noemail.com)", "John Snow (johnsnow@noemail.com)"]
-published-at = "0x8b25c7965b9a58839ae9aef9e967dbcba111a859221f4e9b16c9446395d9a078"
+published-at = "0xa5277b1654d9c329b0b2da4fa7217d2f4e22cbd08392d1d364f51cf26ba4c9ff"
 
-
+#main net = 
 [addresses]
-amm = "0x8b25c7965b9a58839ae9aef9e967dbcba111a859221f4e9b16c9446395d9a078"
+amm = "0xa5277b1654d9c329b0b2da4fa7217d2f4e22cbd08392d1d364f51cf26ba4c9ff"
 sui = "0x2"
 # wormhole = "0xf47329f4344f3bf0f8e436e2f7b485466cff300f12a166563995d3888c296a94"
 # pyth = "0xb53b0f4174108627fbee72e2498b58d6a2714cded53fac537034c220d26302"
