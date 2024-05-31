@@ -10,9 +10,9 @@ module amm::amm_config{
 
     public struct Config has key {
         id: UID,
-        mint_total_supply: u64,
-        mint_decimal: u8,
-        mint_fee: u64,
+        meme_decimal: u8,
+        pool_init_sui_balance: u64,
+        pool_init_meme_coin_balance:u64,
         swap_fee_numerator: u64,
         swap_fee_denominator: u64,
         protocol_fee_numerator: u64,
@@ -26,9 +26,9 @@ module amm::amm_config{
         transfer::transfer(admin_cap, sender(ctx));
         transfer::share_object(Config {
             id: object::new(ctx),
-            mint_decimal: 18,
-            mint_total_supply: 1_000_000_000_000_000_000,
-            mint_fee: 1000,
+            meme_decimal: 9,
+            pool_init_meme_coin_balance: 1_000_000_000_000_000_000,
+            pool_init_sui_balance: 20_000_000,
             swap_fee_numerator: 3, // 0.3% = 3 / 1000
             swap_fee_denominator: 1000,
             protocol_fee_numerator: 1, // 0% = 0 / 1
@@ -39,16 +39,16 @@ module amm::amm_config{
     }
     
     // Getters
-    public fun get_mint_fee(config: &Config): u64 {
-        config.mint_fee
+    public fun get_pool_init_sui_balance(config: &Config): u64 {
+        config.pool_init_sui_balance
     }
 
-    public fun get_mint_total_supply(config: &Config): u64 {
-        config.mint_total_supply
+    public fun get_pool_init_meme_coin_balance(config: &Config): u64 {
+        config.pool_init_meme_coin_balance
     }
 
-    public fun get_mint_decimal(config: &Config): u8 {
-        config.mint_decimal
+    public fun get_meme_decimal(config: &Config): u8 {
+        config.meme_decimal
     }
 
     public fun get_swap_fee(config: &Config): (u64, u64) {
@@ -65,16 +65,16 @@ module amm::amm_config{
         config.minimum_swap_amount
     }
     // Set
-    entry fun set_mint_total_supply(_:&ConfigAdminCap, config: &mut Config, new_total_supply: u64) {
-        config.mint_total_supply = new_total_supply;
+    entry fun set_pool_init_meme_coin(_:&ConfigAdminCap, config: &mut Config, new_balance: u64) {
+        config.pool_init_meme_coin_balance = new_balance;
     }
 
-    entry fun set_mint_fee(_:&ConfigAdminCap, config: &mut Config, new_fee: u64) {
-        config.mint_fee = new_fee;
+    entry fun set_pool_init_sui_balance(_:&ConfigAdminCap, config: &mut Config, new_balance: u64) {
+        config.pool_init_sui_balance = new_balance;
     }
 
     entry fun set_mint_decimal(_:&ConfigAdminCap, config: &mut Config, new_decimal: u8) {
-        config.mint_decimal = new_decimal;
+        config.meme_decimal = new_decimal;
     }
 
     entry fun set_swap_fee(_:&ConfigAdminCap, config: &mut Config, new_numerator: u64, new_denominator: u64) {

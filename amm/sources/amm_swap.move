@@ -46,7 +46,7 @@ module amm::amm_swap {
         reserve_sui:u64,
     }
     
-    const INIT_MEME_COIN_AMOUNT:u64 = 100_000_000_000_000_000;
+    
 
 
     const ECoinInsufficient: u64 = 0;
@@ -55,11 +55,13 @@ module amm::amm_swap {
     entry fun create_pool<MemeCoin>(
         treasury:&TreasuryCap<MemeCoin>,
         metadata:&CoinMetadata<MemeCoin>,
+        config:&Config,
         meme_coin:Coin<MemeCoin>,
         sui_token: Coin<SUI>,
         ctx: &mut TxContext
     ) {
-        assert!(meme_coin.value() == INIT_MEME_COIN_AMOUNT, EInvalidInitialAmount);
+        assert!(meme_coin.value() == config.get_pool_init_meme_coin_balance(), EInvalidInitialAmount);
+        assert!(sui_token.value() > config.get_pool_init_sui_balance(), EInvalidInitialAmount);
         //@@balance check                   
        let pool = Pool<MemeCoin>{
             id: object::new(ctx),
@@ -108,7 +110,6 @@ module amm::amm_swap {
             reserve_meme,
             reserve_sui
         })
-   
     }
 
 
