@@ -61,7 +61,7 @@ module amm::amm_swap {
         ctx: &mut TxContext
     ) {
         assert!(meme_coin.value() == config.get_pool_init_meme_coin_balance(), EInvalidInitialAmount);
-        assert!(sui_token.value() > config.get_pool_init_sui_balance(), EInvalidInitialAmount);
+        assert!(sui_token.value() == config.get_pool_init_sui_balance(), EInvalidInitialAmount);
         //@@balance check                   
        let pool = Pool<MemeCoin>{
             id: object::new(ctx),
